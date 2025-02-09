@@ -9,15 +9,11 @@ Original file is located at
 ## Waste Management using CNN Model
 """
 
-import kagglehub #you may have to pip install that!
+import kagglehub
 
 path = kagglehub.dataset_download("techsash/waste-classification-data")
 
 print("Path to dataset files:", path)
-
-pip install opencv-python
-
-pip install tensorflow
 
 # Importing necessary libraries
 import numpy as np
@@ -279,8 +275,6 @@ predict_func(test_img)
 
 test_img = cv2.imread("/root/.cache/kagglehub/datasets/techsash/waste-classification-data/versions/1/DATASET/TEST/R/R_10753.jpg")
 predict_func(test_img)
-
-pip install streamlit tensorflow opencv-python numpy pillow
 
 model.save("best_model.h5")
 
