@@ -284,6 +284,52 @@ pip install streamlit tensorflow opencv-python numpy pillow
 
 model.save("best_model.h5")
 
-import os
-print(os.listdir())  # This will show all files in your working directory
+
+# Streamlit Integration
+import streamlit as st
+from PIL import Image
+import tensorflow as tf
+
+# Load the trained CNN model
+MODEL_PATH = "best_model.h5"
+model = tf.keras.models.load_model(MODEL_PATH)
+
+# Function to preprocess the uploaded image
+def preprocess_image(image):
+    image = np.array(image)
+    image = cv2.resize(image, (224, 224))  # Resize to match model input size
+    image = image / 255.0  # Normalize pixel values
+    image = np.expand_dims(image, axis=0)  # Add batch dimension
+    return image
+
+# Function to predict waste type
+def predict_waste(image):
+    processed_image = preprocess_image(image)
+    prediction = model.predict(processed_image)
+    class_label = np.argmax(prediction)
+
+    if class_label == 0:
+        return "Recyclable Waste ♻️"
+    else:
+        return "Organic Waste 🌱"
+
+# Streamlit UI
+st.title("Waste Classification Using CNN 🧪")
+st.write("Upload an image to classify it as **Recyclable** or **Organic** waste.")
+
+# File uploader
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "png", "jpeg"])
+
+if uploaded_file is not None:
+    image = Image.open(uploaded_file)
+    
+    # Display the uploaded image
+    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.write("Classifying...")
+
+    # Get prediction
+    result = predict_waste(image)
+    
+    # Display classification result
+    st.subheader(f"Prediction: {result}")
 
